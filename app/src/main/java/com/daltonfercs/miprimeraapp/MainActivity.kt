@@ -4,12 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
     lateinit var btnAddTask:Button
     lateinit var etTask:EditText
     lateinit var rvTasks:RecyclerView
+
+    lateinit var adapter:TaskAdapter
+
+    var tasks = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +27,19 @@ class MainActivity : AppCompatActivity() {
     private fun initUi() {
         initView()
         initListeners()
+        intRecyclerView()
+    }
+
+    private fun intRecyclerView() {
+        rvTasks.layoutManager   =   LinearLayoutManager(this)
+        adapter = TaskAdapter(tasks, {deleteTask(it)})
+        rvTasks.adapter =   adapter
+    }
+
+    private fun deleteTask(position: Int){
+        tasks.removeAt(position)
+        adapter.notifyDataSetChanged()
+
     }
 
     private fun initListeners() {
@@ -29,6 +49,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addTask() {
+        val addToTask = etTask.text.toString()
+        tasks.add(addToTask)
+        adapter.notifyDataSetChanged()
+        etTask.setText("")
 
     }
 
