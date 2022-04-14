@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.daltonfercs.miprimeraapp.TaskApplication.Companion.prefs
 import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun intRecyclerView() {
+        tasks   =   prefs.getTasks()
         rvTasks.layoutManager   =   LinearLayoutManager(this)
         adapter = TaskAdapter(tasks, {deleteTask(it)})
         rvTasks.adapter =   adapter
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun deleteTask(position: Int){
         tasks.removeAt(position)
         adapter.notifyDataSetChanged()
+        prefs.saveTasks(tasks)
 
     }
 
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         tasks.add(addToTask)
         adapter.notifyDataSetChanged()
         etTask.setText("")
+        prefs.saveTasks(tasks)
 
     }
 
